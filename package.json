@@ -27,7 +27,7 @@
   "dependencies": {
     "@turf/projection": "^5.0.4",
     "@turf/turf": "^5.0.4",
-    "async": "^2.1.2",
+    "async": "^3.2.2",
     "aws-sdk": "^2.106.0",
     "bars": "jstrace/bars",
     "bcrypt-nodejs": "0.0.3",
@@ -54,7 +54,7 @@
     "mmmagic": "^0.4.1",
     "mocha": "^4.0.1",
     "moment": "^2.13.0",
-    "mongoose": "^4.0.8",
+    "mongoose": "^5.7.3",
     "mongoose-times": "^0.1.0",
     "monitr": "1.0.0",
     "node-forge": "^0.7.1",
@@ -77,6 +77,6 @@
     "usage": "^0.7.0",
     "uuid": "^3.1.0",
     "vector-tile": "^1.2.0",
-    "winston": "^2.2.0"
+    "winston": "^3.3.0"
   }
 }
