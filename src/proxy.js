@@ -3,11 +3,12 @@ var _ = require('lodash');
 var fs = require('fs-extra');
 var http = require('http-request');
 
-const S3_BUCKETNAME = 'mapic-s3.proxy-tiles.mapic.io';
+// const S3_BUCKETNAME = 'mapic-s3.proxy-tiles.mapic.io';
+const S3_BUCKETNAME = 'mapic-ngi-s3.insarkart.ngi.no';
 
 try {
 	var AWS = require('aws-sdk');
-	var s3 = new AWS.S3({region: 'eu-central-1'});
+	var s3 = new AWS.S3({region: 'eu-north-1'});
 } catch (e) {
 	console.log('AWS error: ', e);
 };

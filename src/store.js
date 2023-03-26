@@ -33,8 +33,10 @@ process.env.AWS_SECRET_ACCESS_KEY   = process.env.MAPIC_AWS_S3_SECRETACCESSKEY  
 if (!process.env.TRAVIS) {
 
     try {
-        var bucketName = 'mapic-s3.' + process.env.MAPIC_DOMAIN;
-        var s3 = new AWS.S3({region: 'eu-central-1'});
+        // var bucketName = 'mapic-s3.' + process.env.MAPIC_DOMAIN;
+        var bucketName = 'mapic-ngi-s3.insarkart.ngi.no'
+        // var s3 = new AWS.S3({region: 'eu-central-1'});
+        var s3 = new AWS.S3({region: 'eu-north-1'});
     } catch (e) {
         console.log('AWS error: ', e);
     };

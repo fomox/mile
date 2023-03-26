@@ -23,6 +23,7 @@ turf.difference = require('@turf/difference');
 turf.booleanWithin = require('@turf/boolean-within');
 turf.transformScale = require('@turf/transform-scale');
 turf.bbox = require('@turf/bbox');
+turf.extent = require('turf-extent');
 
 // modules
 var server = require('./server');
@@ -820,7 +821,7 @@ module.exports = mile = {
         AWS.config.update({
             accessKeyId: process.env.MAPIC_AWS_LAMBDA_ACCESSKEYID, 
             secretAccessKey: process.env.MAPIC_AWS_LAMBDA_SECRETACCESSKEY,
-            region : 'eu-central-1'
+            region : process.env.MAPIC_AWS_LAMBDA_REGION
         });
 
         var lambda = new AWS.Lambda();
@@ -858,7 +859,7 @@ module.exports = mile = {
         AWS.config.update({
             accessKeyId: process.env.MAPIC_AWS_LAMBDA_ACCESSKEYID, 
             secretAccessKey: process.env.MAPIC_AWS_LAMBDA_SECRETACCESSKEY,
-            region : 'eu-central-1'
+            region : process.env.MAPIC_AWS_LAMBDA_REGION
         });
 
         var lambda = new AWS.Lambda();
@@ -970,6 +971,10 @@ module.exports = mile = {
             var parsed_metadata = tools.safeParse(metadata);
             var web_extent = parsed_metadata.extent;
             var input = web_extent;
+            if (!input) {
+                var bbox = turf.extent(parsed_metadata.extent_geojson);
+                input = bbox;
+            }
             var input_a = [parseFloat(input[0]), parseFloat(input[2])]
             var input_b = [parseFloat(input[1]), parseFloat(input[3])]
             var FROM_PROJECTION = 'EPSG:4326'
@@ -1007,7 +1012,6 @@ module.exports = mile = {
                 geometry_field : 'the_geom_3857',
                 asynchronous_request : false,
             };
-
 
             // overwrite some postgis_settings for raster data source
             if (storedLayer.options.data_type == 'raster') {
@@ -1057,21 +1061,23 @@ module.exports = mile = {
             // set bounding box of tile
             bbox = mercator.xyz_to_envelope(parseInt(params.x), parseInt(params.y), parseInt(params.z), false);
             var buffered_bbox = [];
-            buffered_bbox.push(parseFloat(bbox[0]) * 1);
-            buffered_bbox.push(parseFloat(bbox[1]) * 1);
-            buffered_bbox.push(parseFloat(bbox[2]) * 1);
-            buffered_bbox.push(parseFloat(bbox[3]) * 1);
+            var m = 1;
+            buffered_bbox.push(parseFloat(bbox[0]) * m);
+            buffered_bbox.push(parseFloat(bbox[1]) * m);
+            buffered_bbox.push(parseFloat(bbox[2]) * m);
+            buffered_bbox.push(parseFloat(bbox[3]) * m);
 
             var data = {
                 xml : xml,
                 bbox : buffered_bbox,
+                // bbox: [ -20037508.342789244, -7.081154551613622e-10, 0, 20037508.342789244 ],
                 postgis_settings : postgis_settings,
                 extent : mile_layer.options.extent,
                 mile_layer : mile_layer,
                 bufferSize : 128,
                 proj : mercator.proj4,
                 params : params,
-                s3_bucketname : 'mapic-s3.' + process.env.MAPIC_DOMAIN
+                s3_bucketname : 'mapic-ngi-s3.insarkart.ngi.no'
             }
 
             callback(null, data);
@@ -1189,7 +1195,6 @@ module.exports = mile = {
     // return tiles from disk or create
     getRasterTile : function (params, storedLayer, done) {
 
-        // console.log('getRasterTile params', params, storedLayer);
         var outside_extent = mile._isOutsideExtent({
             params : params, 
             layer : storedLayer
