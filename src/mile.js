@@ -1078,6 +1078,7 @@ module.exports = mile = {
                 proj : mercator.proj4,
                 params : params,
                 s3_bucketname : 'mapic-ngi-s3.insarkart.ngi.no'
+                // s3_bucketname : 'mapic-s3.insarkart2.ngi.no'
             }
 
             callback(null, data);
