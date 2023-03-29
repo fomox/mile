@@ -807,7 +807,8 @@ module.exports = mile = {
             }
 
             // set buffer
-            map.bufferSize = 128;
+            // map.bufferSize = 128;
+            map.bufferSize = 256;
 
             // set extent
             map.extent = bbox; // must have extent!
@@ -1009,6 +1010,10 @@ module.exports = mile = {
             var web_extent = parsed_metadata.extent;
             var input = web_extent;
             if (!input) {
+                console.log(
+                    "NO INPUT, USING EXTENT_GEOJSON:",
+                    parsed_metadata.extent_geojson
+                );
                 var bbox = turf.extent(parsed_metadata.extent_geojson);
                 input = bbox;
             }
@@ -1119,7 +1124,8 @@ module.exports = mile = {
                 postgis_settings: postgis_settings,
                 extent: mile_layer.options.extent,
                 mile_layer: mile_layer,
-                bufferSize: 128,
+                // bufferSize: 128,
+                bufferSize: 256,
                 proj: mercator.proj4,
                 params: params,
                 s3_bucketname: "mapic-ngi-s3.insarkart.ngi.no",
