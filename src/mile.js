@@ -1127,7 +1127,7 @@ module.exports = mile = {
 
             // write data to log file
             fs.writeFile(
-                `./logs/data.${mile_layer}.${params.x}.${params.y}.${params.x}.json`,
+                `data.${params.layerUuid}.${params.x}.${params.y}.${params.x}.json`,
                 JSON.stringify(data)
             );
 
