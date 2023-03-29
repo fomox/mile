@@ -807,8 +807,7 @@ module.exports = mile = {
             }
 
             // set buffer
-            // map.bufferSize = 128;
-            map.bufferSize = 256;
+            map.bufferSize = 128;
 
             // set extent
             map.extent = bbox; // must have extent!
@@ -997,43 +996,14 @@ module.exports = mile = {
         // ensure extent is set on layer
         ops.push(function (storedLayerJSON, callback) {
             if (!storedLayerJSON) {
-                console.log("NO STORED LAYER");
                 return callback("No such layerUuid.");
             }
 
             // parse layer
             var parsed_layer = tools.safeParse(storedLayerJSON);
 
-            // get extent from metadata in correct projection
-            var metadata = parsed_layer.options.metadata;
-            var parsed_metadata = tools.safeParse(metadata);
-            var web_extent = parsed_metadata.extent;
-            var input = web_extent;
-            if (!input) {
-                console.log(
-                    "NO INPUT, USING EXTENT_GEOJSON:",
-                    parsed_metadata.extent_geojson
-                );
-                var bbox = turf.extent(parsed_metadata.extent_geojson);
-                input = bbox;
-            }
-            var input_a = [parseFloat(input[0]), parseFloat(input[2])];
-            var input_b = [parseFloat(input[1]), parseFloat(input[3])];
-            var FROM_PROJECTION = "EPSG:4326";
-            var TO_PROJECTION = "EPSG:3857";
-            var output_a = proj4(FROM_PROJECTION, TO_PROJECTION, input_a);
-            var output_b = proj4(FROM_PROJECTION, TO_PROJECTION, input_b);
-            var output_extent =
-                output_a[0] +
-                " " +
-                output_b[0] +
-                "," +
-                output_a[1] +
-                " " +
-                output_b[1];
-
-            // set extent
-            parsed_layer.options.extent = output_extent;
+            // set extent to whole world
+            parsed_layer.options.extent = "-20037508.342789 -20037508.342789, 20037508.342789 20037508.342789"
 
             // global
             mile_layer = parsed_layer;
@@ -1120,22 +1090,14 @@ module.exports = mile = {
             var data = {
                 xml: xml,
                 bbox: buffered_bbox,
-                // bbox: [ -20037508.342789244, -7.081154551613622e-10, 0, 20037508.342789244 ],
                 postgis_settings: postgis_settings,
                 extent: mile_layer.options.extent,
                 mile_layer: mile_layer,
-                // bufferSize: 128,
-                bufferSize: 256,
+                bufferSize: 128,
                 proj: mercator.proj4,
                 params: params,
                 s3_bucketname: "mapic-ngi-s3.insarkart.ngi.no",
             };
-
-            // write data to log file
-            fs.writeFile(
-                `data.${params.layerUuid}.${params.x}.${params.y}.${params.x}.json`,
-                JSON.stringify(data)
-            );
 
             callback(null, data);
         });
