@@ -1,5 +1,5 @@
 #!/bin/bash
-BRANCH=${MAPIC_MILE_BRANCH:-master}
+BRANCH=${MAPIC_MILE_BRANCH:-ngi-2023}
 echo "Checking out $BRANCH"
 git remote set-url origin https://github.com/mapic/mile.git
 git checkout $BRANCH

@@ -878,7 +878,7 @@ module.exports = mile = {
         data.triage = "raster";
 
         var params = {
-            FunctionName: "mapnik" /* required */,
+            FunctionName: "mapnik-test-node20-v4",
             Payload: JSON.stringify(data),
             LogType: "Tail",
         };
@@ -913,7 +913,7 @@ module.exports = mile = {
         data.triage = "grid";
 
         var params = {
-            FunctionName: "mapnik" /* required */,
+            FunctionName: "mapnik-test-node20-v4",
             Payload: JSON.stringify(data),
             LogType: "Tail",
         };

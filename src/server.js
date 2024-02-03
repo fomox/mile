@@ -165,6 +165,8 @@ module.exports = function (mile) {
 	// start server
 	app.listen(3003);
 
+	app.maxConnections = 1000;
+
 	// debug
 	console.log('\n\nMile is up @ ' + 3003);
 	console.log('(Threads:' + process.env.UV_THREADPOOL_SIZE + ')');
